@@ -1,0 +1,18 @@
+SQL II
+Part 1: Count the rows in each iot table
+
+select COUNT(*) FROM lights;
+
+select COUNT(*) FROM light_history;
+
+select COUNT(*) FROM thermostats;
+
+select COUNT(*) FROM thermostat_history;
+
+Part 2: What are the max and min values for the datetime column in the light_history table, and what is the distinct number of days?
+
+SELECT MAX(datetime) from light_history;
+
+SELECT MIN(datetime) from light_history;
+
+SELECT COUNT(DISTINCT CAST(datetime AS DATE)) from light_history; 
