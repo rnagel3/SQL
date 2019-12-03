@@ -1,0 +1,5 @@
+SQL II
+
+Create a table of statistics; collect information about the size of the table and the data distribution
+
+create or replace table lights_stats (select count(*), MIN(watts), MAX(watts), AVG(watts), sum(watts), STD(watts), STD(watts)/avg(watts), MIN(date_replaced), MAX(date_replaced), min(depreciation), MAX(depreciation), AVG(depreciation) from lights);
