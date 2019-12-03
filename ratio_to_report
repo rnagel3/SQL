@@ -1,0 +1,5 @@
+SQL II
+
+Generate a ratio to report of lights for a given room, compare to other lights in that room
+
+SELECT room_id, light_id, watts, AVG(watts) OVER (PARTITION BY room_id) as average_by_room, watts/avg(watts) Over (PARTITION by room_id) as rr from lights ORDER BY room_id, watts desc; 
