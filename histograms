@@ -1,0 +1,18 @@
+SQL II
+
+Create histograms of how often lights are on, which rooms use the most electricity
+
+Which lights are on:
+create or replace table lights_are_on as 
+(SELECT light_id, datetime, on_flag
+from light_history
+where on_flag = 1); 
+
+
+Which rooms use the most electricity:
+select room_id,
+Sum(watts) electricity_usage
+FROM lights
+GROUP BY room_id
+ORDER BY electricity_usage DESC
+Limit 20;
