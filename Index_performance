@@ -1,0 +1,45 @@
+SQL II
+
+Create one or more indexes to improve the following query; prove that your index improves performance (using the "analyze" command):
+
+a. select on_flag, count(*) from light_history where datetime = '2016-01-01 00:01:00' group by on_flag;
+
+analyze select sum(watts) from light_history h inner join lights l on h.light_id = l.light_id  where h.on_flag = 1 and datetime in ('2016-01-01 00:10:00','2016-01-01 00:20:00','2016-01-01 00:30:00');
+
+Results
+With no index:
+lights table: 2022 rows and 2023 r_rows
+light_history table: 10157 rows and 10023 r_rows
+Time: 0.0130
+
+
+Create first index
+create index light_id_idx on lights(light_id); 
+
+Reanalyze
+analyze select sum(watts) from light_history h inner join lights l on h.light_id = l.light_id  where h.on_flag = 1 and datetime in ('2016-01-01 00:10:00','2016-01-01 00:20:00','2016-01-01 00:30:00');
+
+Results
+With first index:
+lights table: 1 row and NULL r_rows
+light_history table: 10157 rows and 10023 r_rows (didn’t change)
+Time: 0.0117 seconds
+
+
+Create a second index
+create index light_id_idx on light_history(light_id, on_flag);
+
+Reanalyze
+analyze select sum(watts) from light_history h inner join lights l on h.light_id = l.light_id  where h.on_flag = 1 and datetime in ('2016-01-01 00:10:00','2016-01-01 00:20:00','2016-01-01 00:30:00');
+
+Results
+With second index:
+lights table: 2022 rows and 2023 r_rows (seems to have reverted back)
+light_history table: 1 row and 2.5 r_rows (seems very good)
+Time: 0.0325 seconds
+
+
+Explanation:
+In the query without an index, the number of r_rows the query returns is much higher than after Index 1 and Index 2. 
+
+With the indexes, the query has to search fewer rows to get to the pointer that points to the information, thus making the process more efficient. As far as time, the query with the 2 indexes took the longest. 
