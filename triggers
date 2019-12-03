@@ -1,0 +1,35 @@
+SQL II
+
+Create three triggers to audit changes to the plants table (one trigger each for
+INSERT, UPDATE, DELETE)
+
+INSERT TRIGGER
+create or replace trigger air_plants_audit
+after insert on rnagel3.plants
+for each row
+BEGIN
+insert into plant_inventory values (current_timestamp, new.id, 'i', new.cost, new.quantity);
+end;
+//
+TEST QUERY: insert into plants values (500,'House Fern',0.12,22);
+
+UPDATE TRIGGER
+create or replace trigger aur_plants_audit
+after update on rnagel3.plants
+for each row
+BEGIN
+insert into plant_inventory values (current_timestamp, new.id, 'u', new.cost, new.quantity);
+end;
+//
+TEST QUERY: update plants set cost = 1 where id = 500;
+
+
+DELETE TRIGGER
+create or replace trigger adr_plants_audit
+AFTER delete on rnagel3.plants
+for each row
+BEGIN
+insert into plant_inventory values (current_timestamp, old.id, 'd', old.cost, old.quantity);
+end;
+//
+TEST QUERY: delete from plants where id = 500;
